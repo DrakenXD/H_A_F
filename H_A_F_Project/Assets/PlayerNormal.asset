@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   Maxlife: 100
-  Maxjump: 10
+  Maxjump: 4000
   Maxspeed: 10
-  life: 90
-  jump: 10
+  life: 100
+  jump: 4000
   speed: 10

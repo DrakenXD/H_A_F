@@ -6,11 +6,16 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerStats stats;
 
-    private Vector2 move;
+    [Header("GroundCheck")]
+    public Transform G_Check;
+    public float G_Radius;
+    public LayerMask G_Layer;
 
+    public Vector2 move;
     private Rigidbody2D rb;
 
     public float gravity;
+    private Vector2 velocity;
 
     private void Awake()
     {
@@ -39,11 +44,19 @@ public class PlayerController : MonoBehaviour
 
     public void GravityController()
     {
-        move.y -= gravity * Time.deltaTime;
+        if (!GroundCheck())
+        {
+            move = Vector2.down * gravity;
 
-        rb.velocity += move;
+            transform.Translate(move * Time.deltaTime);
+        }
+        else move.y = 0;
     }
 
+    public bool GroundCheck()
+    {
+        return Physics2D.OverlapCircle(G_Check.position, G_Radius, G_Layer);
+    }
     public void Movement()
     {
         move.x = Input.GetAxisRaw("Horizontal");
@@ -55,9 +68,15 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = Vector2.up * stats.jump;
+            rb.AddForce(Vector2.up * stats.jump, ForceMode2D.Force);
         }
 
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(G_Check.position, G_Radius);
     }
 }
