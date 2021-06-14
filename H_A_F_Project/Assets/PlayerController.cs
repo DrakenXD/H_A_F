@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public float gravity;
+
     private void Awake()
     {
         stats.life = stats.Maxlife;
@@ -26,15 +28,36 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Movement();
+        Jump();
 
-      
+
+    }
+    private void FixedUpdate()
+    {
+        GravityController();
+    }
+
+    public void GravityController()
+    {
+        move.y -= gravity * Time.deltaTime;
+
+        rb.velocity += move;
     }
 
     public void Movement()
     {
         move.x = Input.GetAxisRaw("Horizontal");
-        move.y = Input.GetAxisRaw("Vertical");
 
         rb.velocity = move * stats.speed;
+    }
+
+    public void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = Vector2.up * stats.jump;
+        }
+
+
     }
 }
